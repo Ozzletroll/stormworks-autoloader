@@ -45,13 +45,32 @@ end
 -- try require("Folder.Filename") to include code from another file in this, so you can store code in libraries
 -- the "LifeBoatAPI" is included by default in /_build/libs/ - you can use require("LifeBoatAPI") to get this, and use all the LifeBoatAPI.<functions>!
 
-ticks = 0
+-- Main battery feed = ch 5
+-- AP feed = ch 6
+-- HE feed = ch 7
+-- Breach open/close = ch 8
+-- Loader track speed = ch 9
+-- Loader arm rotation = ch 10
+
+
 function onTick()
-    ticks = ticks + 1
+	TurretAngle = input.getNumber(1)
+	HEKeyPress = input.getBool(2)
+	APKeyPress = input.getBool(3)
+	LoaderLoaded = input.getBool(4)
+	
+			 	
 end
 
-function onDraw()
-    screen.drawCircle(16,16,5)
+-- Load AP round into main cannon
+function LoadAP()
+
+	
+end
+	
+-- Load HE round into main cannon
+function LoadHE()
+	
 end
 
 
