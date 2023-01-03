@@ -58,33 +58,97 @@ end
 -- Loader main connected = ch 11
 -- Loader HE connected = ch 12
 -- Loader AP connected = ch 13
+-- Cannon Loaded = ch 14
+-- Cannon Belt Loaded = ch 15
 
+Counter = 0
+Wait = 0
 
 function onTick()
 	TurretAngle = input.getNumber(1)
 	HEKeyPress = input.getBool(2)
 	APKeyPress = input.getBool(3)
 	LoaderLoaded = input.getBool(4)
+    LoaderMainConnected = input.getBool(11)
+    LoaderHEConnected = input.getBool(12)
+    LoaderAPConnected = input.getBool(13)
+    CannonLoaded = input.getBool(14)
+    CannonBeltLoaded = input.getBool(15)
 
-    LoadedMainConnected = input.getBool(11)
-    LoadedHEConnected = input.getBool(12)
-    LoadedAPConnected = input.getBool(13)
-	
+    Wait = Wait + 1
+
+    if APKeyPress == true and Counter == 0 then
+        LoadAP1() 
+    end
+    
+    if Counter == 1 and LoaderAPConnected == true then
+        LoadAP2()
+    end
+
+    if Counter == 2 and LoaderMainConnected == true then
+        LoadAP3()
+    end
+
+    if Counter == 3 and CannonBeltLoaded == true then
+        LoadAP4()
+    end
+
+    if Counter == 4 and Wait > 60 then
+        LoadAP5()
+    end
 
 end
 
 
 
 -- Load AP round into main cannon
-function LoadAP()
+function LoadAP1()
+    output.setBool(8,true) -- Open cannon breech
+    output.setNumber(10,0) -- Reset loader arm rotation
+    output.setNumber(9,-1) -- Move feeder arm to reserve position
+    output.setBool(6,true) -- Feed AP belt on
+    Counter = 1
+end
+
+function LoadAP2()
+    output.setNumber(9,1) -- Move feeder arm to breech position
+    output.setNumber(10,TurretAngle) -- Rotate feeder arm to current barrel position
+    Counter = 2
+end
+
+function LoadAP3()
+    output.setBool(6,false) -- Feed AP belt off
+
+    output.setBool(5,true) -- Feed main belt
+    Counter = 3
+end
+
+function LoadAP4()
+    output.setBool(6,false) -- Feed AP belt off
+    Wait = 0
+    Counter = 4
     
-	
 end
-	
--- Load HE round into main cannon
-function LoadHE()
-	
+
+function LoadAP5()
+    output.setBool(5,false) -- Feed main belt off
+    output.setBool(8,false) -- Close cannon breech
+    Counter = 5
 end
+ 
+
+
+-- output.setBool(6,false) -- Feed AP belt off
+-- output.setNumber(9,1) -- Move feeder arm to breech position
+
+
+-- output.setBool(8,false) -- Close cannon breech
+-- output.setBool(6,false) -- Feed AP belt
+-- output.setNumber(9,1) -- Move feeder arm to breech position
+-- output.setBool(5,true) -- Feed main belt
+
+   
+
 
 
 
