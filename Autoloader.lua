@@ -60,8 +60,10 @@ end
 -- Loader AP connected = ch 13
 -- Cannon Loaded = ch 14
 -- Cannon Belt Loaded = ch 15
+-- Fire Button Input = ch 16
 
-Counter = 0
+Counter1 = 0
+Counter2 = 0
 Wait = 0
 
 function onTick()
@@ -74,32 +76,61 @@ function onTick()
     LoaderAPConnected = input.getBool(13)
     CannonLoaded = input.getBool(14)
     CannonBeltLoaded = input.getBool(15)
+    Trigger = input.getBool(16)
 
     Wait = Wait + 1
 
-    if APKeyPress == true and Counter == 0 then
+    if Trigger == true and CannonLoaded == true then
+        output.setBool(11,true) -- Fire!
+        Counter1 = 0
+        Counter2 = 0
+    end
+
+--AP Round Key Press
+
+    if APKeyPress == true and Counter1 == 0 then
         LoadAP1() 
     end
     
-    if Counter == 1 and LoaderAPConnected == true then
+    if Counter1 == 1 and LoaderAPConnected == true then
         LoadAP2()
     end
 
-    if Counter == 2 and LoaderMainConnected == true then
+    if Counter1 == 2 and LoaderMainConnected == true then
         LoadAP3()
     end
 
-    if Counter == 3 and CannonBeltLoaded == true then
+    if Counter1 == 3 and CannonBeltLoaded == true then
         LoadAP4()
     end
 
-    if Counter == 4 and Wait > 60 then
+    if Counter1 == 4 and Wait > 60 then
         LoadAP5()
     end
 
+-- HE Round Key Press
+
+    if HEKeyPress == true and Counter1 == 0 then
+        LoadHE1() 
+    end
+    
+    if Counter2 == 1 and LoaderHEConnected == true then
+        LoadHE2()
+    end
+
+    if Counter2 == 2 and LoaderMainConnected == true then
+        LoadHE3()
+    end
+
+    if Counter2 == 3 and CannonBeltLoaded == true then
+        LoadHE4()
+    end
+
+    if Counter2 == 4 and Wait > 60 then
+        LoadHE5()
+    end
+
 end
-
-
 
 -- Load AP round into main cannon
 function LoadAP1()
@@ -107,48 +138,67 @@ function LoadAP1()
     output.setNumber(10,0) -- Reset loader arm rotation
     output.setNumber(9,-1) -- Move feeder arm to reserve position
     output.setBool(6,true) -- Feed AP belt on
-    Counter = 1
+    Counter1 = 1
 end
 
 function LoadAP2()
     output.setNumber(9,1) -- Move feeder arm to breech position
     output.setNumber(10,TurretAngle) -- Rotate feeder arm to current barrel position
-    Counter = 2
+    Counter1 = 2
 end
 
 function LoadAP3()
     output.setBool(6,false) -- Feed AP belt off
-
     output.setBool(5,true) -- Feed main belt
-    Counter = 3
+    Counter1 = 3
 end
 
 function LoadAP4()
     output.setBool(6,false) -- Feed AP belt off
     Wait = 0
-    Counter = 4
-    
+    Counter1 = 4
 end
 
 function LoadAP5()
     output.setBool(5,false) -- Feed main belt off
+    output.setNumber(10,0) -- Rotate feeder arm to ready position
     output.setBool(8,false) -- Close cannon breech
-    Counter = 5
+    Counter1 = 5
 end
  
+-- Load HE round into main cannon
+function LoadHE1()
+    output.setBool(8,true) -- Open cannon breech
+    output.setNumber(10,0) -- Reset loader arm rotation
+    output.setNumber(9,-1) -- Move feeder arm to reserve position
+    output.setBool(7,true) -- Feed HE belt on
+    Counter2 = 1
+end
 
+function LoadHE2()
+    output.setNumber(9,1) -- Move feeder arm to breech position
+    output.setNumber(10,TurretAngle) -- Rotate feeder arm to current barrel position
+    Counter2 = 2
+end
 
--- output.setBool(6,false) -- Feed AP belt off
--- output.setNumber(9,1) -- Move feeder arm to breech position
+function LoadHE3()
+    output.setBool(7,false) -- Feed HE belt off
+    output.setBool(5,true) -- Feed main belt
+    Counter2 = 3
+end
 
+function LoadHE4()
+    output.setBool(7,false) -- Feed HE belt off
+    Wait = 0
+    Counter2 = 4
+end
 
--- output.setBool(8,false) -- Close cannon breech
--- output.setBool(6,false) -- Feed AP belt
--- output.setNumber(9,1) -- Move feeder arm to breech position
--- output.setBool(5,true) -- Feed main belt
-
-   
-
+function LoadHE5()
+    output.setBool(5,false) -- Feed main belt off
+    output.setNumber(10,0) -- Rotate feeder arm to ready position
+    output.setBool(8,false) -- Close cannon breech
+    Counter2 = 5
+end
 
 
 
