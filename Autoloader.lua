@@ -88,7 +88,7 @@ function onTick()
 
 --AP Round Key Press
 
-    if APKeyPress == true and Counter1 == 0 then
+    if APKeyPress == true and Counter1 == 0 and Counter2 ==0 then
         LoadAP1() 
     end
     
@@ -110,7 +110,7 @@ function onTick()
 
 -- HE Round Key Press
 
-    if HEKeyPress == true and Counter2 == 0 then
+    if HEKeyPress == true and Counter1 == 0 and Counter2 == 0 then
         LoadHE1() 
     end
     
